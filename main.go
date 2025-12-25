@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -9,10 +11,10 @@ import (
 func main() {
 	fmt.Print("Digite a operação (ex: 2 + 2): ")
 
-	var input string
-	fmt.Scanln(&input)
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
 
-	input = strings.ReplaceAll(input, " ", "")
+	input = strings.ReplaceAll(strings.TrimSpace(input), " ", "")
 
 	var operator string
 	for _, op := range []string{"+", "-", "*", "/"} {
@@ -27,6 +29,9 @@ func main() {
 	}
 
 	parts := strings.Split(input, operator)
+	if len(parts) != 2 {
+		panic("Formato inválido")
+	}
 
 	num1, err1 := strconv.Atoi(parts[0])
 	num2, err2 := strconv.Atoi(parts[1])
