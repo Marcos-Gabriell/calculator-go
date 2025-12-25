@@ -1,13 +1,59 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
 
 func main() {
+	fmt.Print("Digite a operação (ex: 2 + 2): ")
 
-	fmt.Println("Enter 2 numbers to sum:")
-	var num1, num2 int
-	fmt.Scan(&num1, &num2)
+	var input string
+	fmt.Scanln(&input)
 
-	sum := num1 + num2
-	fmt.Printf("%d + %d = %d\n", num1, num2, sum)
+	input = strings.ReplaceAll(input, " ", "")
+
+	var operator string
+	for _, op := range []string{"+", "-", "*", "/"} {
+		if strings.Contains(input, op) {
+			operator = op
+			break
+		}
+	}
+
+	if operator == "" {
+		panic("Operação inválida")
+	}
+
+	parts := strings.Split(input, operator)
+
+	num1, err1 := strconv.Atoi(parts[0])
+	num2, err2 := strconv.Atoi(parts[1])
+
+	if err1 != nil || err2 != nil {
+		panic("Número inválido")
+	}
+
+	result := getResult(num1, num2, operator)
+
+	fmt.Printf("%d %s %d = %d\n", num1, operator, num2, result)
+}
+
+func getResult(num1, num2 int, operator string) int {
+	switch operator {
+	case "+":
+		return num1 + num2
+	case "-":
+		return num1 - num2
+	case "*":
+		return num1 * num2
+	case "/":
+		if num2 == 0 {
+			panic("Divisão por zero")
+		}
+		return num1 / num2
+	default:
+		panic("Operação inválida")
+	}
 }
